@@ -1,0 +1,87 @@
+/* Clean iOS reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+}
+
+html, body {
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+body {
+  min-height: 100svh; /* correct for iPhone */
+  background: radial-gradient(circle at center, #1c1c2b, #0f0f14);
+  background:url('https://i.imgur.com/UMnw0tW.jpg');
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  color: white;
+  font-family: 'Ubuntu', sans-serif;
+  background-position:center center;
+  background-size:cover;
+  color: #121212;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.loader-wrapper {
+  text-align: center;
+  width: 100%;
+  padding: 20px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Scale canvas visually without breaking JS math */
+canvas {
+  width: 85vw;
+  max-width: 420px;
+  height: auto;
+  display: block;
+  margin: 0 auto 30px auto;
+  animation: breathe 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+@keyframes breathe {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+body.glow canvas {
+  filter: brightness(1.2) saturate(1.2);
+  transition: filter 0.8s ease;
+}
+
+h1 {
+  font-weight: 300;
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+  opacity: 0.85;
+  animation: pulse 2s ease-in-out infinite;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+/* Soft romantic pulse */
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+body.fade-out {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}

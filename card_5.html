@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Card</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+
+        *{
+            box-sizing:border-box;
+            -webkit-tap-highlight-color:transparent;
+        }
+
+        body{
+            margin:0;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:linear-gradient(135deg,#FDE3A7,#f6d28b);
+            font-family:'Indie Flower',cursive;
+            overflow:hidden;
+        }
+
+        /* ================= ENVELOPE ================= */
+
+        .envelope{
+            position:absolute;
+            width:320px;
+            height:200px;
+            background:#f4e2c4;
+            border-radius:10px;
+            box-shadow:0 15px 40px rgba(0,0,0,.3);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            cursor:pointer;
+            transition:1.2s ease;
+            z-index:10;
+        }
+
+        .envelope::before{
+            content:"";
+            position:absolute;
+            top:-100px;
+            width:100%;
+            height:100px;
+            background:#e8d3ae;
+            clip-path:polygon(0 100%,50% 0,100% 100%);
+            transform-origin:bottom;
+            transition:1.2s ease;
+        }
+
+        .envelope.open{
+            transform:translateY(-220px);
+            opacity:0;
+            pointer-events:none;
+        }
+
+        .envelope.open::before{
+            transform:rotateX(180deg);
+        }
+
+        /* ================= SCENE ================= */
+
+        .scene{
+            perspective:2000px;
+            width:360px;
+            height:520px;
+            position:relative;
+        }
+
+        /* ================= CARD ================= */
+
+        .card{
+            width:100%;
+            height:100%;
+            position:relative;
+            transform-style:preserve-3d;
+            transition:1.8s cubic-bezier(.68,-0.55,.27,1.55);
+            transform:rotateY(0deg) scale(.8);
+            opacity:0;
+        }
+
+        .card.show{
+            opacity:1;
+            transform:rotateY(0deg) scale(1);
+        }
+
+        .card.open{
+            transform:rotateY(-180deg) scale(1);
+        }
+
+        /* ================= PAGES ================= */
+
+        .page{
+            position:absolute;
+            inset:0;
+            border-radius:18px;
+            backface-visibility:hidden;
+            box-shadow:0 25px 60px rgba(0,0,0,.35);
+        }
+
+        /* FRONT COVER */
+        /*.front{*/
+        /*    background:linear-gradient(135deg,#d9d9d9,#f3e7c9,#d1c7b7);*/
+        /*    display:flex;*/
+        /*    justify-content:center;*/
+        /*    align-items:center;*/
+        /*}*/
+
+        /*.front img{*/
+        /*    width:65%;*/
+        /*    animation:float 4s ease-in-out infinite;*/
+        /*}*/
+
+        .front{
+            background:#fff;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            overflow:hidden;
+        }
+
+        .front img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            animation:none; /* remove floating */
+        }
+
+
+        /*.front{*/
+        /*    background:linear-gradient(135deg,#f3e7c9,#e8d3ae);*/
+        /*    display:flex;*/
+        /*    justify-content:center;*/
+        /*    align-items:center;*/
+        /*    padding:25px;*/
+        /*}*/
+
+        /*.front img{*/
+        /*    width:100%;*/
+        /*    border-radius:12px;*/
+        /*    box-shadow:0 10px 25px rgba(0,0,0,.25);*/
+        /*}*/
+
+
+
+        /* INSIDE PAGE */
+        .inside{
+            background:#fffdf7;
+            transform:rotateY(180deg);
+            padding:60px 25px;
+            overflow:hidden;
+        }
+
+        /* Golden Glow */
+        .inside::before{
+            content:"";
+            position:absolute;
+            inset:0;
+            background:radial-gradient(circle,
+            rgba(255,215,120,.6) 0%,
+            rgba(255,200,0,.3) 40%,
+            transparent 70%);
+            opacity:0;
+            transition:1.2s;
+            animation:glowPulse 4s infinite ease-in-out;
+        }
+
+        .card.open .inside::before{
+            opacity:1;
+        }
+
+        @keyframes glowPulse{
+            0%,100%{transform:scale(1);}
+            50%{transform:scale(1.05);}
+        }
+
+        /* Floating animation */
+        @keyframes float{
+            0%,100%{transform:translateY(0);}
+            50%{transform:translateY(-10px);}
+        }
+
+        /* ================= TEXT ================= */
+
+        .content p{
+            opacity:0;
+            transform:translateY(20px);
+        }
+
+        .card.open .content p{
+            animation:fadeUp .8s forwards;
+        }
+
+        .card.open .content p:nth-child(3){animation-delay:.4s}
+        .card.open .content p:nth-child(4){animation-delay:.8s}
+        .card.open .content p:nth-child(5){animation-delay:1.2s}
+        .card.open .content p:nth-child(6){animation-delay:1.6s}
+        .card.open .content p:nth-child(7){animation-delay:2s}
+        .card.open .content p:nth-child(8){animation-delay:2.4s}
+
+        @keyframes fadeUp{
+            to{opacity:1;transform:translateY(0);}
+        }
+
+        .color1{color:#1BBC9B;}
+        .color2{
+            color:#C0392B;
+            text-align: right;
+        }
+
+        /* ================= CONFETTI ================= */
+
+        .confetti{
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%,-50%) scale(0);
+            font-size:32px;
+            opacity:0;
+            transition:1s ease;
+        }
+
+        .card.open .confetti{
+            transform:translate(-50%,-50%) scale(1.6);
+            opacity:1;
+        }
+
+        .tap-text{
+            text-align:center;
+            margin-top:20px;
+            font-size:14px;
+            opacity:.6;
+        }
+
+        .photo-frame{
+            position:absolute;
+            top:120px;
+            right:30px;
+            width:140px;
+            background:#fff;
+            padding:10px;
+            border-radius:6px;
+            box-shadow:0 10px 20px rgba(0,0,0,.25);
+            transform:rotate(6deg);
+            opacity:0;
+            transition:1s ease;
+        }
+
+        .photo-frame img{
+            width:100%;
+            border-radius:1px;
+        }
+
+        .card.open .photo-frame{
+            opacity:1;
+            transform:rotate(3deg);
+        }
+        .photo-frame{
+            z-index:2;
+        }
+
+        .content{
+            position:relative;
+            z-index:1;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="envelope" id="envelope">
+    Tap to Open ✉️
+</div>
+
+<div class="scene">
+
+    <div class="card" id="card">
+
+        <div class="page front">
+            <img src="I2.png">
+        </div>
+
+        <div class="page inside">
+            <div class="content">
+                <h4 class="color1">Dear Nikumoni,</h4>
+
+                <p>I feel lucky every day</p>
+                    <p>that I met you.</p>
+                <p>Every moment is better</p>
+                <p>because it’s with you.</p>
+                <p>If I had to start life</p>
+                <p>over, I would still choose you. Every time.</p>
+                <p>The world got you today, and I got lucky every day.</p>
+
+                <h4 class="color2">HAPPY BIRTHDAY Love Baby ♥</h4>
+                <h4 class="color2">-R</h4>
+
+            </div>
+
+            <div class="photo-frame">
+                <img src="I_in_1.jpg" alt="Memory">
+            </div>
+
+
+        </div>
+
+<!--        <div class="confetti">🎉 🎊 ✨ 🎈</div>-->
+
+    </div>
+
+    <div class="tap-text">Tap Card To Open & Close 🎉</div>
+
+</div>
+
+<script>
+
+    const envelope = document.getElementById("envelope");
+    const card = document.getElementById("card");
+
+    envelope.addEventListener("click", () => {
+        envelope.classList.add("open");
+        setTimeout(()=>{
+            card.classList.add("show");
+        },600);
+    });
+
+    card.addEventListener("click", () => {
+        card.classList.toggle("open");
+    });
+
+</script>
+
+</body>
+</html>
